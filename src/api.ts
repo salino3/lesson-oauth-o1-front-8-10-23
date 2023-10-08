@@ -71,3 +71,32 @@ api.get('/user-profile', async (req, res) => {
 });
 
 
+//
+
+api.get(
+  '/facebook',
+  passport.authenticate('facebook', {
+    scope: ['public_profile', 'email'],
+    session: false,
+  })
+);
+
+
+api.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', {
+    failureRedirect: '/',
+    session: false,
+  }),
+  (req, res) => {
+    console.log('Facebook`s answer arrived!');
+    console.log(req.user);
+    const user = req.user as User;
+    const token = createAccessToken(user.id);
+    res.cookie(COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: false,
+    });
+    res.redirect('/mainapp.html');
+  }
+);

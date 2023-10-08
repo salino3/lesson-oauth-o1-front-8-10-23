@@ -4,10 +4,10 @@ let lastId : number = 1;
 let userCollection: User[] = [];
 
 export const userProfileExists = async (
-  googleProfileId: string
+  providerId: string
 ): Promise<boolean> => {
   const index = userCollection.findIndex(
-    (user) => user.googleId === googleProfileId
+    (user) => user.googleId === providerId || user.facebookId === providerId
   );
 
   return index !== -1;
@@ -38,4 +38,8 @@ export const getUserByGoogleId = async (googleId: string): Promise<User> => {
   return user;
 };
 
+export const getUserByFacebookId = async (facebookId: string): Promise<User> => {
+  const user = userCollection.find((user) => user.facebookId === facebookId);
 
+  return user
+};
